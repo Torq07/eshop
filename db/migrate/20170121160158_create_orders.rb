@@ -6,6 +6,7 @@ class CreateOrders < ActiveRecord::Migration[5.0]
       t.string :address,              null: false
       t.string :country,      				null: false
       t.integer :total_price      
+      t.belongs_to :user, index: true
 
       t.timestamps
     end

@@ -3,6 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   attr_accessor :login
 	# attr_accessible :login
+  has_many :orders
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
@@ -19,11 +20,10 @@ class User < ApplicationRecord
 	  conditions = warden_conditions.dup
 	  login = conditions.delete(:login)
 	  login = if login.to_i == 0
-	  	login.strip.downcase 
-	  else
-	  	login.to_i
-	  end		
-	  where(conditions).where(["lower(email) = :value OR num_id = :value OR alt_num_id = :value", {value: login}]).first
+      where(conditions).where(["lower(email) = :value", {value: login.strip.downcase }]).first
+    else
+      where(conditions).where(["num_id = :value OR alt_num_id = :value", {value: login.to_i}]).first
+    end   
 	end
 
 end
